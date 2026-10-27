@@ -1,0 +1,1990 @@
+{
+  "manifest": {
+    "schema": 1,
+    "version": "1.12.1.3",
+    "upstreamTag": "v1.12.1.3",
+    "auditSchema": 2,
+    "harness": "scripts/pvp/audit.config.ts",
+    "rulesSHA256": "07263899e029c397a37c71e3ab140cbe40e6aa3504f4a111fda3fccd791e7b7b"
+  },
+  "samples": [
+    {
+      "name": "evolved-shiny-boss-catch",
+      "waves": 1,
+      "old": {
+        "trainerId": 23428,
+        "secretId": 61548,
+        "gender": 1,
+        "dexData": {
+          "1": {
+            "seenAttr": "157",
+            "caughtAttr": "157",
+            "natureAttr": 128,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "0"
+          },
+          "2": {
+            "seenAttr": "0",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "3": {
+            "seenAttr": "198",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 1,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          }
+        },
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 40,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 1,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {
+          "SEE_SHINY": 1792942448965
+        },
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942449558,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "next": {
+        "trainerId": 23428,
+        "secretId": 61548,
+        "gender": 1,
+        "dexData": {
+          "1": {
+            "seenAttr": "157",
+            "caughtAttr": "223",
+            "natureAttr": 130,
+            "seenCount": 0,
+            "caughtCount": 1,
+            "hatchedCount": 0,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "0"
+          },
+          "2": {
+            "seenAttr": "0",
+            "caughtAttr": "198",
+            "natureAttr": 2,
+            "seenCount": 0,
+            "caughtCount": 1,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "3": {
+            "seenAttr": "198",
+            "caughtAttr": "198",
+            "natureAttr": 2,
+            "seenCount": 1,
+            "caughtCount": 1,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          }
+        },
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 40,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 40,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 3,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 1,
+          "shinyPokemonCaught": 3,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {
+          "SEE_SHINY": 1792942448965
+        },
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942449562,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "facts": {
+        "root": 1,
+        "physicalCatches": 1,
+        "candy": 40
+      }
+    },
+    {
+      "name": "epic-shiny-hatch",
+      "waves": 1,
+      "old": {
+        "trainerId": 14474,
+        "secretId": 36939,
+        "gender": 1,
+        "dexData": {
+          "1": {
+            "seenAttr": "157",
+            "caughtAttr": "157",
+            "natureAttr": 128,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "0"
+          }
+        },
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 29,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {},
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [
+          {
+            "id": 12345679,
+            "tier": 0,
+            "sourceType": 3,
+            "hatchWaves": 0,
+            "timestamp": 1792942449961,
+            "variantTier": 2,
+            "isShiny": true,
+            "species": 1,
+            "eggMoveIndex": 0,
+            "overrideHiddenAbility": false
+          }
+        ],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942449961,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "next": {
+        "trainerId": 14474,
+        "secretId": 36939,
+        "gender": 1,
+        "dexData": {
+          "1": {
+            "seenAttr": "157",
+            "caughtAttr": "223",
+            "natureAttr": 130,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 1,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "0"
+          }
+        },
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 1,
+            "candyCount": 40,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 29,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 1,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 1,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {},
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942449964,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "facts": {
+        "root": 1,
+        "physicalHatches": 1,
+        "candy": 40
+      }
+    },
+    {
+      "name": "trainer-six-defeats",
+      "waves": 1,
+      "old": {
+        "trainerId": 57508,
+        "secretId": 64283,
+        "gender": 1,
+        "dexData": {},
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "4": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "7": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "19": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "46": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "133": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 38,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 6,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {},
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942450444,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "next": {
+        "trainerId": 57508,
+        "secretId": 64283,
+        "gender": 1,
+        "dexData": {},
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 2,
+            "friendship": 18,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "4": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 2,
+            "friendship": 18,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "7": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 2,
+            "friendship": 18,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "19": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 6,
+            "friendship": 18,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "46": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 3,
+            "friendship": 18,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "133": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 2,
+            "friendship": 18,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 38,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 6,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {},
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942450448,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "facts": {
+        "pointsPerMember": 168,
+        "defeated": 6,
+        "party": 6,
+        "multiplier": 4
+      }
+    },
+    {
+      "name": "fusion-friendship-false",
+      "waves": 1,
+      "old": {
+        "trainerId": 30629,
+        "secretId": 18873,
+        "gender": 1,
+        "dexData": {},
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "4": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 33,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 1,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {
+          "SPLICE": 1792942450846
+        },
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942450847,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "next": {
+        "trainerId": 30629,
+        "secretId": 18873,
+        "gender": 1,
+        "dexData": {},
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 10,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "4": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 10,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 33,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 1,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {
+          "SPLICE": 1792942450846
+        },
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942450850,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "facts": {
+        "pointsPerComponent": 10
+      }
+    },
+    {
+      "name": "fusion-friendship-true",
+      "waves": 1,
+      "old": {
+        "trainerId": 25677,
+        "secretId": 65100,
+        "gender": 1,
+        "dexData": {},
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "4": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 36,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 1,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 1,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {
+          "SEE_SHINY": 1792942450928,
+          "SPLICE": 1792942451327
+        },
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942451327,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "next": {
+        "trainerId": 25677,
+        "secretId": 65100,
+        "gender": 1,
+        "dexData": {},
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 14,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "4": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 14,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 36,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 1,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 1,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {
+          "SEE_SHINY": 1792942450928,
+          "SPLICE": 1792942451327
+        },
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942451330,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "facts": {
+        "pointsPerComponent": 14
+      }
+    },
+    {
+      "name": "party-candy-at-friendship-cap",
+      "waves": 1,
+      "old": {
+        "trainerId": 21563,
+        "secretId": 63965,
+        "gender": 1,
+        "dexData": {
+          "1": {
+            "seenAttr": "157",
+            "caughtAttr": "157",
+            "natureAttr": 128,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "0"
+          },
+          "4": {
+            "seenAttr": "157",
+            "caughtAttr": "157",
+            "natureAttr": 33554432,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "0"
+          },
+          "7": {
+            "seenAttr": "157",
+            "caughtAttr": "157",
+            "natureAttr": 2,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "0"
+          }
+        },
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "4": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "7": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 32,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {},
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942451703,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "next": {
+        "trainerId": 21563,
+        "secretId": 63965,
+        "gender": 1,
+        "dexData": {
+          "1": {
+            "seenAttr": "157",
+            "caughtAttr": "157",
+            "natureAttr": 128,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "20000000"
+          },
+          "4": {
+            "seenAttr": "157",
+            "caughtAttr": "157",
+            "natureAttr": 33554432,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "20000000"
+          },
+          "7": {
+            "seenAttr": "157",
+            "caughtAttr": "157",
+            "natureAttr": 2,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [15, 15, 15, 15, 15, 15],
+            "ribbons": "20000000"
+          }
+        },
+        "starterData": {
+          "1": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 45,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "4": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 45,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "7": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 45,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 32,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 1,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {
+          "MAX_FRIENDSHIP": 1792942451705
+        },
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942451706,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "facts": {
+        "pointsPerMember": 45
+      }
+    },
+    {
+      "name": "breeder-thirteen-eggs",
+      "waves": 1,
+      "old": {
+        "trainerId": 46149,
+        "secretId": 47007,
+        "gender": 1,
+        "dexData": {
+          "35": {
+            "seenAttr": "0",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "438": {
+            "seenAttr": "0",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "446": {
+            "seenAttr": "0",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          }
+        },
+        "starterData": {
+          "46": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 11,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 0,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {},
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942451825,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "next": {
+        "trainerId": 46149,
+        "secretId": 47007,
+        "gender": 1,
+        "dexData": {
+          "35": {
+            "seenAttr": "153",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 1,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "438": {
+            "seenAttr": "153",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 1,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "446": {
+            "seenAttr": "153",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 1,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          }
+        },
+        "starterData": {
+          "46": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 1,
+            "friendship": 19,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 51,
+          "battles": 1,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 3,
+          "pokemonDefeated": 1,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 1,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {},
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [
+          {
+            "id": 83916961,
+            "tier": 0,
+            "sourceType": 4,
+            "hatchWaves": 9,
+            "timestamp": 1792942452356,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 686,
+            "eggMoveIndex": 1,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 678839997,
+            "tier": 0,
+            "sourceType": 4,
+            "hatchWaves": 9,
+            "timestamp": 1792942452356,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 909,
+            "eggMoveIndex": 1,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 1022055446,
+            "tier": 0,
+            "sourceType": 4,
+            "hatchWaves": 9,
+            "timestamp": 1792942452357,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 777,
+            "eggMoveIndex": 0,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 241440503,
+            "tier": 0,
+            "sourceType": 4,
+            "hatchWaves": 9,
+            "timestamp": 1792942452357,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 602,
+            "eggMoveIndex": 0,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 205852702,
+            "tier": 0,
+            "sourceType": 4,
+            "hatchWaves": 9,
+            "timestamp": 1792942452357,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 13,
+            "eggMoveIndex": 1,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 689585967,
+            "tier": 0,
+            "sourceType": 4,
+            "hatchWaves": 9,
+            "timestamp": 1792942452357,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 10,
+            "eggMoveIndex": 1,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 1071897488,
+            "tier": 0,
+            "sourceType": 4,
+            "hatchWaves": 9,
+            "timestamp": 1792942452357,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 919,
+            "eggMoveIndex": 0,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 1024191079,
+            "tier": 0,
+            "sourceType": 4,
+            "hatchWaves": 9,
+            "timestamp": 1792942452357,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 50,
+            "eggMoveIndex": 0,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 1113978321,
+            "tier": 1,
+            "sourceType": 4,
+            "hatchWaves": 24,
+            "timestamp": 1792942452357,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 714,
+            "eggMoveIndex": 2,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 1179468643,
+            "tier": 1,
+            "sourceType": 4,
+            "hatchWaves": 24,
+            "timestamp": 1792942452358,
+            "variantTier": 0,
+            "isShiny": true,
+            "species": 996,
+            "eggMoveIndex": 1,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 1485964065,
+            "tier": 1,
+            "sourceType": 4,
+            "hatchWaves": 24,
+            "timestamp": 1792942452358,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 4222,
+            "eggMoveIndex": 0,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 1671551390,
+            "tier": 1,
+            "sourceType": 4,
+            "hatchWaves": 24,
+            "timestamp": 1792942452358,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 4222,
+            "eggMoveIndex": 1,
+            "overrideHiddenAbility": false
+          },
+          {
+            "id": 1138269154,
+            "tier": 1,
+            "sourceType": 4,
+            "hatchWaves": 24,
+            "timestamp": 1792942452358,
+            "variantTier": 0,
+            "isShiny": false,
+            "species": 2074,
+            "eggMoveIndex": 1,
+            "overrideHiddenAbility": false
+          }
+        ],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942452367,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "facts": {
+        "eventEggs": 13
+      }
+    },
+    {
+      "name": "weird-dream-direct-rewards",
+      "waves": 1,
+      "old": {
+        "trainerId": 44982,
+        "secretId": 60349,
+        "gender": 1,
+        "dexData": {
+          "283": {
+            "seenAttr": "0",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "284": {
+            "seenAttr": "0",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "312": {
+            "seenAttr": "0",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "594": {
+            "seenAttr": "0",
+            "caughtAttr": "0",
+            "natureAttr": 0,
+            "seenCount": 0,
+            "caughtCount": 0,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          }
+        },
+        "starterData": {
+          "283": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "312": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "594": {
+            "moveset": null,
+            "eggMoves": 0,
+            "candyCount": 0,
+            "friendship": 0,
+            "abilityAttr": 0,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 11,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 0,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 0,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {},
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942452513,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "next": {
+        "trainerId": 44982,
+        "secretId": 60349,
+        "gender": 1,
+        "dexData": {
+          "283": {
+            "seenAttr": "0",
+            "caughtAttr": "153",
+            "natureAttr": 2,
+            "seenCount": 0,
+            "caughtCount": 1,
+            "hatchedCount": 0,
+            "ivs": [17, 10, 12, 23, 14, 12],
+            "ribbons": "0"
+          },
+          "284": {
+            "seenAttr": "0",
+            "caughtAttr": "153",
+            "natureAttr": 2,
+            "seenCount": 0,
+            "caughtCount": 1,
+            "hatchedCount": 0,
+            "ivs": [0, 0, 0, 0, 0, 0],
+            "ribbons": "0"
+          },
+          "312": {
+            "seenAttr": "0",
+            "caughtAttr": "153",
+            "natureAttr": 8192,
+            "seenCount": 0,
+            "caughtCount": 1,
+            "hatchedCount": 0,
+            "ivs": [18, 23, 21, 25, 24, 22],
+            "ribbons": "0"
+          },
+          "594": {
+            "seenAttr": "0",
+            "caughtAttr": "149",
+            "natureAttr": 33554432,
+            "seenCount": 0,
+            "caughtCount": 1,
+            "hatchedCount": 0,
+            "ivs": [22, 20, 20, 31, 21, 25],
+            "ribbons": "0"
+          }
+        },
+        "starterData": {
+          "283": {
+            "moveset": null,
+            "eggMoves": 2,
+            "candyCount": 2,
+            "friendship": 0,
+            "abilityAttr": 4,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "312": {
+            "moveset": null,
+            "eggMoves": 4,
+            "candyCount": 2,
+            "friendship": 0,
+            "abilityAttr": 2,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          },
+          "594": {
+            "moveset": null,
+            "eggMoves": 8,
+            "candyCount": 2,
+            "friendship": 0,
+            "abilityAttr": 1,
+            "passiveAttr": 0,
+            "valueReduction": 0,
+            "classicWinCount": 0
+          }
+        },
+        "gameStats": {
+          "playTime": 25,
+          "battles": 0,
+          "classicSessionsPlayed": 1,
+          "sessionsWon": 0,
+          "ribbonsOwned": 0,
+          "dailyRunSessionsPlayed": 0,
+          "dailyRunSessionsWon": 0,
+          "endlessSessionsPlayed": 0,
+          "highestEndlessWave": 0,
+          "highestLevel": 0,
+          "highestMoney": 0,
+          "highestDamage": 0,
+          "highestHeal": 0,
+          "pokemonSeen": 0,
+          "pokemonDefeated": 0,
+          "pokemonCaught": 4,
+          "pokemonHatched": 0,
+          "subLegendaryPokemonSeen": 0,
+          "subLegendaryPokemonCaught": 0,
+          "subLegendaryPokemonHatched": 0,
+          "legendaryPokemonSeen": 0,
+          "legendaryPokemonCaught": 0,
+          "legendaryPokemonHatched": 0,
+          "mythicalPokemonSeen": 0,
+          "mythicalPokemonCaught": 0,
+          "mythicalPokemonHatched": 0,
+          "shinyPokemonSeen": 0,
+          "shinyPokemonCaught": 0,
+          "shinyPokemonHatched": 0,
+          "pokemonFused": 0,
+          "trainersDefeated": 0,
+          "eggsPulled": 0,
+          "rareEggsPulled": 0,
+          "epicEggsPulled": 0,
+          "legendaryEggsPulled": 0,
+          "manaphyEggsPulled": 0
+        },
+        "unlocks": {
+          "0": false,
+          "1": false,
+          "2": false,
+          "3": false
+        },
+        "achvUnlocks": {
+          "HIDDEN_ABILITY": 1792942452520
+        },
+        "voucherUnlocks": {},
+        "voucherCounts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0
+        },
+        "eggs": [],
+        "gameVersion": "1.12.1.3",
+        "timestamp": 1792942452700,
+        "eggPity": [0, 0, 0, 0],
+        "unlockPity": [0, 0, 0, 0],
+        "appliedMigrators": {}
+      },
+      "facts": {
+        "transformed": 3,
+        "physicalCatches": 3
+      }
+    }
+  ]
+}

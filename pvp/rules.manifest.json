@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "version": "1.12.1.3",
+  "upstreamTag": "v1.12.1.3",
+  "auditSchema": 2,
+  "harness": "scripts/pvp/audit.config.ts",
+  "rulesSHA256": "07263899e029c397a37c71e3ab140cbe40e6aa3504f4a111fda3fccd791e7b7b"
+}

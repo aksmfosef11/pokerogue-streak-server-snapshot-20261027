@@ -1,0 +1,1108 @@
+/*
+	Copyright (C) 2024 - 2025  Pagefault Games
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Affero General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
+
+	You should have received a copy of the GNU Affero General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+package api
+
+import (
+	"database/sql"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"log"
+	"net/http"
+	"net/url"
+	"strconv"
+	"time"
+
+	"github.com/pagefaultgames/rogueserver/api/account"
+	"github.com/pagefaultgames/rogueserver/api/daily"
+	"github.com/pagefaultgames/rogueserver/api/savedata"
+	"github.com/pagefaultgames/rogueserver/db"
+	"github.com/pagefaultgames/rogueserver/defs"
+)
+
+var (
+	// Issued when playtime is missing from the save data, indicating corruption or save tampering
+	ErrNoPlaytime = errors.New("no playtime found")
+
+	// Issued when the tid/sid does not match database, indicating corruption or save tampering
+	ErrIdMismatch = errors.New("session out of date: stored trainer or secret ID does not match")
+
+	// Issued when the playtime in the client save is lower than the server save, indicating an outdated save
+	ErrGreaterPlaytime = errors.New("session out of date: existing playtime is greater")
+
+	// Issued when the client save version is lower than the minimum game version, indicating outdated client code
+	ErrVersionTooLow = errors.New("session out of date: save version below minimum game version")
+
+	// Issued when the client save version is lower than the existing save version, indicating outdated client code
+	ErrExistingVersionGreater = errors.New("session out of date: existing version is greater")
+
+	// Issued when version comparison fails, indicating a missing or malformed version string in the save data
+	ErrVersionCompare = errors.New("failed to compare versions")
+
+	// Issued when migrator validation fails
+	ErrMigratorsDesynced = errors.New("session out of date: migrators desynced")
+)
+
+/*
+	The caller of endpoint handler functions are responsible for extracting the necessary data from the request.
+	Handler functions are responsible for checking the validity of this data and returning a result or error.
+	Handlers should not return serialized JSON, instead return the struct itself.
+*/
+// account
+
+// Helper method that validates the trainer and secret IDs in the system save data against the database's
+// stored values.
+// If the stored values are not present, it will create them using the provided system save data.
+// Otherwise, an http error will be generated and the caller should return immediately.
+//
+// Returns `nil` if the IDs are valid or were successfully created, otherwise returns an error indicating the issue.
+func validateOrCreateIds(uuid []byte, systemData defs.SystemSaveData) (int, error) {
+	storedTrainerId, storedSecretId, err := db.Store.FetchTrainerIds(uuid)
+	if err != nil {
+		return http.StatusInternalServerError, err
+	}
+
+	if storedTrainerId > 0 || storedSecretId > 0 {
+		if systemData.TrainerId != storedTrainerId || systemData.SecretId != storedSecretId {
+			return http.StatusBadRequest, ErrIdMismatch
+		}
+	} else {
+		err = db.Store.UpdateTrainerIds(systemData.TrainerId, systemData.SecretId, uuid)
+		if err != nil {
+			return http.StatusInternalServerError, err
+		}
+	}
+	return http.StatusOK, nil
+}
+
+// Helper method that ensures the client is sending a save with greater (or equal)
+// playtime than the existing save.
+//
+// Returns `nil` if the playtime is valid, otherwise returns an error indicating the issue.
+func validatePlaytime(systemData defs.SystemSaveData, oldSystem defs.SystemSaveData) error {
+	playtime, ok := systemData.GameStats.(map[string]any)["playTime"].(float64)
+	if !ok {
+		return ErrNoPlaytime
+	}
+
+	oldPlaytime, ok := oldSystem.GameStats.(map[string]any)["playTime"].(float64)
+	if !ok {
+		return ErrNoPlaytime
+	}
+
+	if playtime < oldPlaytime {
+		return ErrGreaterPlaytime
+	}
+	return nil
+}
+
+// Helper method for validating the game version and applied migrators
+//
+// Guard calls with `!defs.IsBeta` so this function is stripped from beta builds.
+//
+// Returns `nil` if the version and migrators are valid, otherwise returns an error indicating the issue.
+func validateSystemVersion(systemData defs.SystemSaveData, oldSystem defs.SystemSaveData) error {
+	minVerCmp, err := savedata.CompareGameVersion("1.12.0.10", systemData.GameVersion)
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrVersionCompare, err)
+	}
+	if minVerCmp > 0 {
+		return ErrVersionTooLow
+	}
+
+	saveVerCmp, err := savedata.CompareGameVersion(oldSystem.GameVersion, systemData.GameVersion)
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrVersionCompare, err)
+	}
+	if saveVerCmp > 0 {
+		return ErrExistingVersionGreater
+	}
+
+	if !savedata.ValidMigrators(systemData.AppliedMigrators, oldSystem.AppliedMigrators) {
+		return ErrMigratorsDesynced
+	}
+
+	return nil
+}
+
+func handleAccountInfo(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	username, err := db.Store.FetchUsernameFromUUID(uuid)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	discordId, err := db.Store.FetchDiscordIdByUsername(username)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	googleId, err := db.Store.FetchGoogleIdByUsername(username)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	var hasAdminRole bool
+	if discordId != "" {
+		hasAdminRole, _ = account.Discord.IsUserDiscordAdmin(discordId, account.DiscordGuildID)
+	}
+
+	response, err := account.Info(db.Store, username, discordId, googleId, uuid, hasAdminRole)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	writeJSON(w, r, response)
+}
+
+func handleAccountRegister(w http.ResponseWriter, r *http.Request) {
+	err := account.Register(db.Store, r.PostFormValue("username"), r.PostFormValue("password"))
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func handleAccountLogin(w http.ResponseWriter, r *http.Request) {
+	response, err := account.Login(db.Store, r.PostFormValue("username"), r.PostFormValue("password"))
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	writeJSON(w, r, response)
+}
+
+func handleAccountChangePW(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	err = account.ChangePW(db.Store, uuid, r.PostFormValue("password"))
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	username, err := db.Store.FetchUsernameFromUUID(uuid)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	// create a new session with these credentials
+	response, err := account.Login(db.Store, username, r.Form.Get("password"))
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	writeJSON(w, r, response)
+}
+
+func handleAccountLogout(w http.ResponseWriter, r *http.Request) {
+	token, err := tokenFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusBadRequest)
+		return
+	}
+
+	err = account.Logout(db.Store, token)
+	if err != nil {
+		// also possible for InternalServerError but that's unlikely unless the server blew up
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+// game
+func handleGameTitleStats(w http.ResponseWriter, r *http.Request) {
+	stats := defs.TitleStats{
+		PlayerCount: playerCount,
+		BattleCount: battleCount,
+	}
+
+	writeJSON(w, r, stats)
+}
+
+func handleGameClassicSessionCount(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, classicSessionCount)
+}
+
+func handleSession(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	slot, err := strconv.Atoi(r.URL.Query().Get("slot"))
+	if err != nil {
+		httpError(w, r, err, http.StatusBadRequest)
+		return
+	}
+
+	if slot < 0 || slot >= defs.SessionSlotCount {
+		httpError(w, r, fmt.Errorf("slot id %d out of range", slot), http.StatusBadRequest)
+		return
+	}
+
+	if !r.URL.Query().Has("clientSessionId") {
+		httpError(w, r, fmt.Errorf("missing clientSessionId"), http.StatusBadRequest)
+		return
+	}
+	// Serialize session saves with the system and combined-save endpoints. A
+	// caller that clears an unused slot can require that it is still empty and
+	// that its existing client session is still current, without taking over a
+	// player's browser session or deleting a concurrently-created run.
+	releaseSave := lockAccountSaves(uuid)
+	defer releaseSave()
+	candidateOnly := r.PathValue("action") == "clear" && r.URL.Query().Get("pvpCandidateOnly") == "1"
+	if candidateOnly {
+		active, checkErr := db.Store.IsActiveSession(uuid, r.URL.Query().Get("clientSessionId"))
+		if checkErr != nil {
+			httpError(w, r, checkErr, http.StatusInternalServerError)
+			return
+		}
+		if !active {
+			httpError(w, r, fmt.Errorf("session out of date: not active"), http.StatusConflict)
+			return
+		}
+		_, checkErr = savedata.GetSession(db.Store, uuid, slot)
+		if checkErr == nil {
+			httpError(w, r, fmt.Errorf("session slot is not empty"), http.StatusConflict)
+			return
+		}
+		if !errors.Is(checkErr, savedata.ErrSaveNotExist) {
+			httpError(w, r, checkErr, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	err = db.Store.UpdateActiveSession(uuid, r.URL.Query().Get("clientSessionId"))
+	if err != nil {
+		httpError(w, r, fmt.Errorf("failed to update active session: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	switch r.PathValue("action") {
+	case "get":
+		save, err := savedata.GetSession(db.Store, uuid, slot)
+		if err != nil {
+			if errors.Is(err, savedata.ErrSaveNotExist) {
+				http.Error(w, err.Error(), http.StatusNotFound)
+				return
+			}
+
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+
+		writeJSON(w, r, save)
+	case "update":
+		var session defs.SessionSaveData
+		err = json.NewDecoder(r.Body).Decode(&session)
+		if err != nil {
+			httpError(w, r, fmt.Errorf("failed to decode request body: %s", err), http.StatusBadRequest)
+			return
+		}
+
+		existingSave, err := savedata.GetSession(db.Store, uuid, slot)
+		if err != nil {
+			if !errors.Is(err, savedata.ErrSaveNotExist) {
+				httpError(w, r, fmt.Errorf("failed to retrieve session save data: %s", err), http.StatusInternalServerError)
+				return
+			}
+		} else {
+			if existingSave.Seed == session.Seed && existingSave.WaveIndex > session.WaveIndex {
+				httpError(w, r, fmt.Errorf("session out of date: existing wave index is greater"), http.StatusBadRequest)
+				return
+			}
+		}
+
+		err = savedata.UpdateSession(db.Store, uuid, slot, session)
+		if err != nil {
+			httpError(w, r, fmt.Errorf("failed to put session data: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+	case "clear":
+		var session defs.SessionSaveData
+		err = json.NewDecoder(r.Body).Decode(&session)
+		if err != nil {
+			httpError(w, r, fmt.Errorf("failed to decode request body: %s", err), http.StatusBadRequest)
+			return
+		}
+		if candidateOnly {
+			// The automation supplies an ordinary auditable clear snapshot but
+			// must never delete a save slot or mark synthetic campaign progress.
+			if session.GameMode != 0 || session.WaveIndex != 200 || session.BattleType != 2 {
+				httpError(w, r, fmt.Errorf("classic clear candidate required"), http.StatusBadRequest)
+				return
+			}
+			if err := streakForSystem(session.GameVersion).ObserveClear(uuid, session); err != nil {
+				httpError(w, r, err, http.StatusConflict)
+				return
+			}
+			writeJSON(w, r, savedata.ClearResponse{Success: true})
+			return
+		}
+
+		seed, err := db.Store.GetDailyRunSeed()
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+
+		resp, err := savedata.Clear(db.Store, uuid, slot, seed, session)
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+
+		if err := streakForSystem(session.GameVersion).ObserveClear(uuid, session); err != nil {
+			log.Printf("pvp clear: %v", err)
+		}
+		writeJSON(w, r, resp)
+	case "newclear":
+		resp, err := savedata.NewClear(db.Store, uuid, slot)
+		if err != nil {
+			httpError(w, r, fmt.Errorf("failed to read new clear: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		writeJSON(w, r, resp)
+	case "delete":
+		err := savedata.DeleteSession(db.Store, uuid, slot)
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+	default:
+		httpError(w, r, fmt.Errorf("unknown action"), http.StatusBadRequest)
+		return
+	}
+}
+
+type CombinedSaveData struct {
+	System          defs.SystemSaveData  `json:"system"`
+	Session         defs.SessionSaveData `json:"session"`
+	SessionSlotId   int                  `json:"sessionSlotId"`
+	ClientSessionId string               `json:"clientSessionId"`
+}
+
+// TODO wrap this in a transaction
+func handleUpdateAll(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+	releaseSave := lockAccountSaves(uuid)
+	defer releaseSave()
+
+	var data CombinedSaveData
+	err = json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		httpError(w, r, fmt.Errorf("failed to decode request body: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	if data.ClientSessionId == "" {
+		httpError(w, r, fmt.Errorf("missing clientSessionId"), http.StatusBadRequest)
+		return
+	}
+
+	active, err := db.Store.IsActiveSession(uuid, data.ClientSessionId)
+	if err != nil {
+		httpError(w, r, fmt.Errorf("failed to check active session: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	if !active {
+		httpError(w, r, fmt.Errorf("session out of date: not active"), http.StatusBadRequest)
+		return
+	}
+
+	code, err := validateOrCreateIds(uuid, data.System)
+	if err != nil {
+		httpError(w, r, err, code)
+		return
+	}
+
+	oldSystem, err := savedata.GetSystem(db.Store, uuid)
+	if err != nil {
+		if !errors.Is(err, savedata.ErrSaveNotExist) {
+			httpError(w, r, fmt.Errorf("failed to retrieve playtime: %s", err), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		err = validatePlaytime(data.System, oldSystem)
+		if err != nil {
+			httpError(w, r, err, http.StatusBadRequest)
+			return
+		}
+
+		if !defs.IsBeta {
+			err = validateSystemVersion(data.System, oldSystem)
+			if err != nil {
+				httpError(w, r, err, http.StatusBadRequest)
+				return
+			}
+		}
+	}
+
+	if err = validateCampaignUpgrade(uuid, oldSystem, data.System); err != nil {
+		httpError(w, r, err, http.StatusConflict)
+		return
+	}
+	existingSave, err := savedata.GetSession(db.Store, uuid, data.SessionSlotId)
+	if err != nil {
+		if !errors.Is(err, savedata.ErrSaveNotExist) {
+			httpError(w, r, fmt.Errorf("failed to retrieve session save data: %s", err), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		if existingSave.Seed == data.Session.Seed && existingSave.WaveIndex > data.Session.WaveIndex {
+			httpError(w, r, fmt.Errorf("session out of date: existing wave index is greater"), http.StatusBadRequest)
+			return
+		}
+	}
+
+	err = savedata.Update(db.Store, uuid, data.SessionSlotId, data.Session)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	err = savedata.Update(db.Store, uuid, 0, data.System)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	if err := streakForSystem(data.System.GameVersion).ObserveSystem(uuid, oldSystem, data.System, &data.Session); err != nil {
+		log.Printf("pvp validation: %v", err)
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+type SystemVerifyResponse struct {
+	Valid      bool                `json:"valid"`
+	SystemData defs.SystemSaveData `json:"systemData"`
+}
+
+func handleSystem(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+	releaseSave := lockAccountSaves(uuid)
+	defer releaseSave()
+
+	if !r.URL.Query().Has("clientSessionId") {
+		httpError(w, r, fmt.Errorf("missing clientSessionId"), http.StatusBadRequest)
+		return
+	}
+
+	active, err := db.Store.IsActiveSession(uuid, r.URL.Query().Get("clientSessionId"))
+	if err != nil {
+		httpError(w, r, fmt.Errorf("failed to check active session: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	switch r.PathValue("action") {
+	case "get":
+		if !active {
+			err = db.Store.UpdateActiveSession(uuid, r.URL.Query().Get("clientSessionId"))
+			if err != nil {
+				httpError(w, r, fmt.Errorf("failed to update active session: %s", err), http.StatusBadRequest)
+				return
+			}
+		}
+
+		save, err := savedata.GetSystem(db.Store, uuid)
+		if err != nil {
+			if errors.Is(err, savedata.ErrSaveNotExist) {
+				http.Error(w, err.Error(), http.StatusNotFound)
+				return
+			}
+
+			httpError(w, r, fmt.Errorf("failed to get system save data: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		versionCmp, cmpErr := savedata.CompareGameVersion("1.12.0.10", save.GameVersion)
+		if cmpErr != nil {
+			httpError(w, r, fmt.Errorf("failed to compare versions: %s", cmpErr), http.StatusBadRequest)
+			return
+		}
+		if versionCmp == 1 && save.AppliedMigrators["1.12.0.10-removeInvalidStarterAndDexData"] > 0 {
+			save.GameVersion = "1.12.0.10"
+		}
+
+		writeJSON(w, r, save)
+	case "update":
+		if !active {
+			httpError(w, r, fmt.Errorf("session out of date: not active"), http.StatusBadRequest)
+			return
+		}
+
+		var system defs.SystemSaveData
+		err = json.NewDecoder(r.Body).Decode(&system)
+		if err != nil {
+			httpError(w, r, fmt.Errorf("failed to decode request body: %s", err), http.StatusBadRequest)
+			return
+		}
+
+		code, err := validateOrCreateIds(uuid, system)
+		if err != nil {
+			httpError(w, r, err, code)
+			return
+		}
+
+		oldSystem, err := savedata.GetSystem(db.Store, uuid)
+		if err != nil {
+			if !errors.Is(err, savedata.ErrSaveNotExist) {
+				httpError(w, r, fmt.Errorf("failed to retrieve playtime: %s", err), http.StatusInternalServerError)
+				return
+			}
+		} else {
+			err = validatePlaytime(system, oldSystem)
+			if err != nil {
+				httpError(w, r, err, http.StatusBadRequest)
+				return
+			}
+			if !defs.IsBeta {
+				err = validateSystemVersion(system, oldSystem)
+				if err != nil {
+					httpError(w, r, err, http.StatusBadRequest)
+					return
+				}
+			}
+		}
+
+		if err = validateCampaignUpgrade(uuid, oldSystem, system); err != nil {
+			httpError(w, r, err, http.StatusConflict)
+			return
+		}
+		err = savedata.UpdateSystem(db.Store, uuid, system)
+		if err != nil {
+			httpError(w, r, fmt.Errorf("failed to put system data: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		if err := streakForSystem(system.GameVersion).ObserveSystem(uuid, oldSystem, system, nil); err != nil {
+			log.Printf("pvp validation: %v", err)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	case "verify":
+		response := SystemVerifyResponse{
+			Valid: active,
+		}
+
+		// not valid, send server state
+		if !active {
+			err := db.Store.UpdateActiveSession(uuid, r.URL.Query().Get("clientSessionId"))
+			if err != nil {
+				httpError(w, r, fmt.Errorf("failed to update active session: %s", err), http.StatusBadRequest)
+				return
+			}
+
+			storedSaveData, err := db.Store.ReadSystemSaveData(uuid)
+			if err != nil {
+				httpError(w, r, fmt.Errorf("failed to read session save data: %s", err), http.StatusInternalServerError)
+				return
+			}
+
+			response.SystemData = storedSaveData
+		}
+
+		writeJSON(w, r, response)
+	case "delete":
+		err := savedata.DeleteSystem(db.Store, uuid)
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+	default:
+		httpError(w, r, fmt.Errorf("unknown action"), http.StatusBadRequest)
+		return
+	}
+}
+
+// Interface providing database operations needed for getting daily seed.
+type HandleDailySeedStore interface {
+	GetDailyRunSeed() (string, error)
+}
+
+// daily
+func handleDailySeed(w http.ResponseWriter, r *http.Request) {
+	seed, err := db.Store.GetDailyRunSeed()
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Fprint(w, seed)
+}
+
+// Interface for database operations needed for getting daily rankings.
+type HandleDailyRankingsStore interface {
+	daily.RankingsStore
+}
+
+func handleDailyRankings(w http.ResponseWriter, r *http.Request) {
+	var err error
+
+	var category int
+	if r.URL.Query().Has("category") {
+		category, err = strconv.Atoi(r.URL.Query().Get("category"))
+		if err != nil {
+			httpError(w, r, fmt.Errorf("failed to convert category: %s", err), http.StatusBadRequest)
+			return
+		}
+	}
+
+	page := 1
+	if r.URL.Query().Has("page") {
+		page, err = strconv.Atoi(r.URL.Query().Get("page"))
+		if err != nil {
+			httpError(w, r, fmt.Errorf("failed to convert page: %s", err), http.StatusBadRequest)
+			return
+		}
+	}
+
+	rankings, err := daily.Rankings(db.Store, category, page)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	writeJSON(w, r, rankings)
+}
+
+type HandleDailyRankingsPageCountStore interface {
+	daily.RankingPageCountStore
+}
+
+func handleDailyRankingPageCount(w http.ResponseWriter, r *http.Request) {
+	var category int
+	if r.URL.Query().Has("category") {
+		var err error
+		category, err = strconv.Atoi(r.URL.Query().Get("category"))
+		if err != nil {
+			httpError(w, r, fmt.Errorf("failed to convert category: %s", err), http.StatusBadRequest)
+			return
+		}
+	}
+
+	count, err := daily.RankingPageCount(db.Store, category)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+	}
+
+	fmt.Fprint(w, count)
+}
+
+// redirectWithOAuthError redirects the user to the game URL with an error message
+// in the query string.
+//
+// This allows the client to provide feedback to the user when the OAuth flow fails
+// instead of just redirecting to the game URL with no context.
+func redirectWithOAuthError(w http.ResponseWriter, r *http.Request, provider, reason string) {
+	u, err := url.Parse(account.GameURL)
+	if err != nil {
+		http.Redirect(w, r, account.GameURL, http.StatusSeeOther)
+		return
+	}
+
+	q := u.Query()
+	q.Set("oauthError", reason)
+	q.Set("provider", provider)
+	u.RawQuery = q.Encode()
+
+	http.Redirect(w, r, u.String(), http.StatusSeeOther)
+}
+
+// redirect link after authorizing application link
+func handleProviderCallback(w http.ResponseWriter, r *http.Request) {
+	provider := r.PathValue("provider")
+	state := r.URL.Query().Get("state")
+	var externalAuthId string
+	var err error
+	switch provider {
+	case "discord":
+		externalAuthId, err = account.Discord.HandleDiscordCallback(r)
+	case "google":
+		externalAuthId, err = account.Google.HandleGoogleCallback(r)
+	default:
+		http.Error(w, "invalid provider", http.StatusBadRequest)
+		return
+	}
+
+	if err != nil {
+		if errors.Is(err, account.ErrOAuthCancelled) {
+			redirectWithOAuthError(w, r, provider, "cancelled")
+			return
+		}
+
+		// Can't use `httpError` here because we want to redirect
+		log.Printf("%s: %s\n", r.URL.Path, err)
+		redirectWithOAuthError(w, r, provider, "provider_error")
+		return
+	}
+
+	if state != "" {
+		err = account.OAuthLink(db.Store, provider, externalAuthId, state)
+		if err != nil {
+			redirectWithOAuthError(w, r, provider, "link_failed")
+			return
+		}
+
+		http.Redirect(w, r, account.GameURL, http.StatusSeeOther)
+		return
+	}
+
+	sessionToken, err := account.OAuthLogin(db.Store, provider, externalAuthId)
+	if err != nil {
+		if errors.Is(err, account.ErrOAuthNotLinked) {
+			redirectWithOAuthError(w, r, provider, "not_linked")
+			return
+		}
+
+		redirectWithOAuthError(w, r, provider, "server_error")
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "pokerogue_sessionId",
+		Value:    sessionToken,
+		Path:     "/",
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
+		Domain:   "pokerogue.net",
+		Expires:  time.Now().Add(time.Hour * 24 * 30 * 3), // 3 months
+	})
+
+	http.Redirect(w, r, account.GameURL, http.StatusSeeOther)
+}
+
+type HandleProviderLogoutStore interface {
+	RemoveDiscordIdByUUID(uuid []byte) error
+	RemoveGoogleIdByUUID(uuid []byte) error
+}
+
+func handleProviderLogout(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusBadRequest)
+		return
+	}
+
+	switch r.PathValue("provider") {
+	case "discord":
+		err = db.Store.RemoveDiscordIdByUUID(uuid)
+	case "google":
+		err = db.Store.RemoveGoogleIdByUUID(uuid)
+	default:
+		http.Error(w, "invalid provider", http.StatusBadRequest)
+		return
+	}
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func handleAdminDiscordLink(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	userDiscordId, err := db.Store.FetchDiscordIdByUUID(uuid)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	hasRole, err := account.Discord.IsUserDiscordAdmin(userDiscordId, account.DiscordGuildID)
+	if !hasRole || err != nil {
+		httpError(w, r, fmt.Errorf("user does not have the required role"), http.StatusForbidden)
+		return
+	}
+
+	username := r.PostFormValue("username")
+	discordId := r.PostFormValue("discordId")
+
+	// this does a quick call to make sure the username exists on the server before allowing the rest of the code to run
+	// this calls error value 404 (StatusNotFound) if there's no data; this means the username does not exist in the server
+	_, err = db.Store.CheckUsernameExists(username)
+	if err != nil {
+		httpError(w, r, fmt.Errorf("username does not exist on the server"), http.StatusNotFound)
+		return
+	}
+
+	userUuid, err := db.Store.FetchUUIDFromUsername(username)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	err = db.Store.AddDiscordIdByUUID(discordId, userUuid)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	log.Printf("%s: %s added discord id %s to username %s", r.URL.Path, userDiscordId, discordId, username)
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func handleAdminDiscordUnlink(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	userDiscordId, err := db.Store.FetchDiscordIdByUUID(uuid)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	hasRole, err := account.Discord.IsUserDiscordAdmin(userDiscordId, account.DiscordGuildID)
+	if !hasRole || err != nil {
+		httpError(w, r, fmt.Errorf("user does not have the required role"), http.StatusForbidden)
+		return
+	}
+
+	username := r.PostFormValue("username")
+	discordId := r.PostFormValue("discordId")
+
+	switch {
+	case username != "":
+		log.Printf("Username given, removing discordId")
+		// this does a quick call to make sure the username exists on the server before allowing the rest of the code to run
+		// this calls error value 404 (StatusNotFound) if there's no data; this means the username does not exist in the server
+		_, err = db.Store.CheckUsernameExists(username)
+		if err != nil {
+			httpError(w, r, fmt.Errorf("username does not exist on the server"), http.StatusNotFound)
+			return
+		}
+
+		userUuid, err := db.Store.FetchUUIDFromUsername(username)
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+
+		err = db.Store.RemoveDiscordIdByUUID(userUuid)
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+	case discordId != "":
+		log.Printf("DiscordID given, removing discordId")
+		err = db.Store.RemoveDiscordIdByDiscordId(discordId)
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	log.Printf("%s: %s removed discord id %s from username %s", userDiscordId, r.URL.Path, r.Form.Get("discordId"), r.Form.Get("username"))
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func handleAdminGoogleLink(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	userDiscordId, err := db.Store.FetchDiscordIdByUUID(uuid)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	hasRole, err := account.Discord.IsUserDiscordAdmin(userDiscordId, account.DiscordGuildID)
+	if !hasRole || err != nil {
+		httpError(w, r, fmt.Errorf("user does not have the required role"), http.StatusForbidden)
+		return
+	}
+
+	username := r.PostFormValue("username")
+	googleId := r.PostFormValue("googleId")
+
+	// this does a quick call to make sure the username exists on the server before allowing the rest of the code to run
+	// this calls error value 404 (StatusNotFound) if there's no data; this means the username does not exist in the server
+	_, err = db.Store.CheckUsernameExists(username)
+	if err != nil {
+		httpError(w, r, fmt.Errorf("username does not exist on the server"), http.StatusNotFound)
+		return
+	}
+
+	userUuid, err := db.Store.FetchUUIDFromUsername(username)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	err = db.Store.AddGoogleIdByUUID(googleId, userUuid)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+
+	log.Printf("%s: %s added google id %s to username %s", r.URL.Path, userDiscordId, googleId, username)
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func handleAdminGoogleUnlink(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	userDiscordId, err := db.Store.FetchDiscordIdByUUID(uuid)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	hasRole, err := account.Discord.IsUserDiscordAdmin(userDiscordId, account.DiscordGuildID)
+	if !hasRole || err != nil {
+		httpError(w, r, fmt.Errorf("user does not have the required role"), http.StatusForbidden)
+		return
+	}
+
+	username := r.PostFormValue("username")
+	googleId := r.PostFormValue("googleId")
+
+	switch {
+	case username != "":
+		log.Printf("Username given, removing googleId")
+		// this does a quick call to make sure the username exists on the server before allowing the rest of the code to run
+		// this calls error value 404 (StatusNotFound) if there's no data; this means the username does not exist in the server
+		_, err = db.Store.CheckUsernameExists(username)
+		if err != nil {
+			httpError(w, r, fmt.Errorf("username does not exist on the server"), http.StatusNotFound)
+			return
+		}
+
+		userUuid, err := db.Store.FetchUUIDFromUsername(username)
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+
+		err = db.Store.RemoveGoogleIdByUUID(userUuid)
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+	case googleId != "":
+		log.Printf("DiscordID given, removing googleId")
+		err = db.Store.RemoveGoogleIdByDiscordId(googleId)
+		if err != nil {
+			httpError(w, r, err, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	log.Printf("%s: %s removed google id %s from username %s", userDiscordId, r.URL.Path, r.Form.Get("googleId"), r.Form.Get("username"))
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func handleAdminSearch(w http.ResponseWriter, r *http.Request) {
+	uuid, err := uuidFromRequest(r)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	userDiscordId, err := db.Store.FetchDiscordIdByUUID(uuid)
+	if err != nil {
+		httpError(w, r, err, http.StatusUnauthorized)
+		return
+	}
+
+	hasRole, err := account.Discord.IsUserDiscordAdmin(userDiscordId, account.DiscordGuildID)
+	if !hasRole || err != nil {
+		httpError(w, r, fmt.Errorf("user does not have the required role"), http.StatusForbidden)
+		return
+	}
+
+	username := r.URL.Query().Get("username")
+
+	// this does a quick call to make sure the username exists on the server before allowing the rest of the code to run
+	// this calls error value 404 (StatusNotFound) if there's no data; this means the username does not exist in the server
+	_, err = db.Store.CheckUsernameExists(username)
+	if err != nil {
+		httpError(w, r, fmt.Errorf("username does not exist on the server"), http.StatusNotFound)
+		return
+	}
+
+	// this does a single call that does a query for multiple columns from our database and makes an object out of it, which is returned to us
+	adminSearchResult, err := db.Store.FetchAdminDetailsByUsername(username)
+	if err != nil {
+		httpError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	uuid, err = db.Store.FetchUUIDFromUsername(username)
+	if err == nil {
+		systemData, err := savedata.GetSystem(db.Store, uuid)
+		if err == nil {
+			adminSearchResult.SystemData = &systemData
+		}
+	}
+
+	writeJSON(w, r, adminSearchResult)
+	log.Printf("%s: %s searched for username %s", userDiscordId, r.URL.Path, username)
+}

@@ -1,0 +1,13 @@
+# Version profiles
+
+`PVP_VERSION_REGISTRY=pvp/versions.json` loads the supported version map. Without this setting, the existing `PVP_RULES_DIR` and `PVP_AUDIT_URL` configuration remains supported.
+
+Each entry names its exact four-part game version, exported `rules.json` and `rules.manifest.json` directory, audit policy, and native worker URL. Relative directories resolve from the registry file. The startup loader checks the version, rule hash, schema, and required rule tables. An unregistered client version is excluded from PvP while ordinary uploads retain the existing soft qualification behavior.
+
+Keep a separate native checkout/build and browser origin for each game version. Export its own game data and rules, copy the rule pair into a matching subdirectory here, then add its entry and native worker service. A copied or relabeled export is a routing test control and does not establish native compatibility. The supplied registry enables native 1.12.1.3 and 1.12.1.2 builds, each with its own real 200-wave replay and durable DB recovery verification. The 1.12.1.2 source comes from official tag b271d3e63f82059da9bb93b01f69ec33ed7a10a0 with only the seven guarded seam files patched; its original Salt Cure damage differs from 1.12.1.3 and passes its original native tests.
+
+The prepared old source lives at the workspace's `pvp-versions/1.12.1.2`, with `pvp-version-source.json` recording native/addon commits, asset/locale pins and preparation hashes. `scripts/pvp/prepare-version.mjs` in the main client can prepare a fresh directory from a local official tag. Export rules with the native image before activation. Both releases pin identical assets/locales and dependency locks; preparation rejects different pins instead of silently sharing incompatible content. Normal system saves remain shared and retain upstream upgrade/downgrade protections. The old browser URL uses `127.0.0.1:8003`, while the main URL uses `localhost:8000`, to keep host cookies separate.
+
+The original 1.12.1.3 account/team tables and seed domains retain their identities. Additional versions use isolated state, teams, qualification, and seed domains. Existing enhanced system data first imported into another version still uses operator baseline review; approval is scoped to the selected version. Use `pvp-admin review -version VERSION USERNAME` and the existing reasoned approval command against a matching system save.
+
+All profiles share the server's audit concurrency and 64 in-memory pending/running queue slots. Pending audits are durable and recovered when workers become available. There is no per-account daily registration cap; historical attempts remain recorded. Operator review opens the registry without starting background audit recovery.
